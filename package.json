@@ -22,7 +22,7 @@
     "nlp",
     "search"
   ],
-  "main": "./lib/fm-index.jsx",
+  "main": "./src/fm-index.jsx",
   "homepage": "https://github.com/shibukawa/fm-index.jsx",
   "bugs": {
     "url": "https://github.com/shibukawa/fm-index.jsx/issues"
