@@ -1,7 +1,3 @@
 node_modules
 *.tgz
 .*.swp
-dest/*.amd.js
-dest/*.closure.js
-dest/*.global.js
-dest/fm-index.js
