@@ -6,10 +6,10 @@
  */
 
 import "console.jsx";
-import "wavelet-matrix.jsx";
-import "burrows-wheeler-transform.jsx";
-import "binary-support.jsx";
-import "binary-io.jsx";
+import "./wavelet-matrix.jsx";
+import "./burrows-wheeler-transform.jsx";
+import "./binary-support.jsx";
+import "./binary-io.jsx";
 
 
 __export__ class FMIndex
