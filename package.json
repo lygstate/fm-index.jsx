@@ -1,6 +1,6 @@
 {
   "name": "fm-index",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "FM-index is the fastest full text search algorithm using a compressed index file. This is FM-index for JSX/JS/AMD/Common.js.",
   "scripts": {
     "build": "./node_modules/.bin/grunt build",
@@ -22,7 +22,7 @@
     "nlp",
     "search"
   ],
-  "main": "./src/fm-index.jsx",
+  "main": "./dest/fm-index.common.js",
   "homepage": "https://github.com/shibukawa/fm-index.jsx",
   "bugs": {
     "url": "https://github.com/shibukawa/fm-index.jsx/issues"
