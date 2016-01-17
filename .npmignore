@@ -1,5 +1,5 @@
 node_modules
 *.tgz
 .*.swp
-dest
-!/dest/fm-index.common.js
+dest/*
+!dest/fm-index.common.js

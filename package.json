@@ -1,11 +1,11 @@
 {
   "name": "fm-index",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "FM-index is the fastest full text search algorithm using a compressed index file. This is FM-index for JSX/JS/AMD/Common.js.",
   "scripts": {
-    "build": "./node_modules/.bin/grunt build",
-    "test": "./node_modules/.bin/grunt test",
-    "doc": "./node_modules/.bin/grunt doc"
+    "build": "grunt build",
+    "test": "grunt test",
+    "doc": "grunt doc"
   },
   "engines": {
     "node": ">=0.8.0"
@@ -54,6 +54,14 @@
     "binary-support.jsx": "~0.2.0",
     "bit-vector.jsx": "~0.4.0"
   },
-  "author": "shibukawa",
-  "license": "MIT"
+  "author": {
+    "name": "shibukawa"
+  },
+  "license": "MIT",
+  "gitHead": "5185748709175e7864b309db27a38c6ae98c6e0d",
+  "readme": "fm-index.jsx\r\n===========================================\r\n\r\n[![Build Status](https://travis-ci.org/shibukawa/fm-index.jsx.png)](https://travis-ci.org/shibukawa/fm-index.jsx)\r\n\r\nSynopsis\r\n---------------\r\n\r\nFM-index is the fastest full text search algorithm using a compressed index file. This is FM-index for JSX/JS/AMD/Common.js.\r\n\r\nMotivation\r\n---------------\r\n\r\nFM-index is the alternate search algorithm of an inverse index algorithm. FM-index has the following advantages:\r\n\r\n1. It doesn't need to split word (like N-gram). It is good for CJK languages.\r\n2. It can recreate original document from the index file\r\n3. Index file is compressed.\r\n4. Easy to control the performance and the index file size.\r\n\r\nCode Example\r\n---------------\r\n\r\n### Use from JSX\r\n\r\n```js\r\nimport \"fm-index.jsx\";\r\n\r\nclass _Main {\r\n    static function main(argv : string[]) : void\r\n    {\r\n        var fm = new FMIndex();\r\n        fm.push(\"hello\");\r\n        fm.push(\"world\");\r\n        this.fm.build(5);\r\n        console.log(this.fm.search('world')); // -> [5]\r\n    }\r\n}\r\n```\r\n\r\n### Use from node.js\r\n\r\n```js\r\nvar FMIndex = require('fm-index.common.js').FMIndex;\r\n```\r\n\r\n### Use from require.js\r\n\r\n```js\r\n// use fm-index.amd.js\r\ndefine(['fm-index.amd.jsx'], function (fmindex) {\r\n\r\n    var fmindex = fmindex.FMIndex();\r\n    // Write simple usage here!\r\n});\r\n```\r\n\r\n### Use via standard JSX function\r\n\r\n```html\r\n<script src=\"fm-index.js\" type=\"text/javascript\"></script>\r\n<script type=\"text/javascript\">\r\nwindow.onload = function () {\r\n    var FMIndex = JSX.require(\"lib/fm-index.js\").FMIndex;\r\n});\r\n</script>\r\n```\r\n\r\n### Use via global variables\r\n\r\n```html\r\n<script src=\"fm-index.global.js\" type=\"text/javascript\"></script>\r\n<script type=\"text/javascript\">\r\nwindow.onload = function () {\r\n    var fmindex = new FMIndex();\r\n});\r\n</script>\r\n```\r\n\r\nInstallation\r\n---------------\r\n\r\n```sh\r\n$ npm install fm-index.jsx\r\n```\r\n\r\nYou should add the following modules to `package.json` if you want to use from JSX:\r\n\r\n* burrows-wheeler-transform.jsx (0.3.x)\r\n* wavelet-matrix.jsx (0.3.x)\r\n* binary-io.jsx (0.3.x)\r\n* bit-vector.jsx (0.4.x)\r\n* binary-support.jsx (0.2.x)\r\n\r\nIf you want to use this library from other JSX project, install like the following:\r\n\r\n```sh\r\n$ npm install fm-index.jsx --save-dev\r\n```\r\n\r\nor add like these lines to your parent project's `package.json`:\r\n\r\n```js\r\n   devDependencies: {\r\n       \"fm-index.jsx\": \"~0.3.0\"\r\n   },\r\n   peerDepenencies: {\r\n       \"fm-index.jsx\": \"~0.3.0\"\r\n   }\r\n```\r\n\r\nAnd add `node_modules/fm-index.jsx/src` as a search path.\r\nYou should add to `peerDepenencies` if your product is library.\r\n\r\nAPI Reference\r\n------------------\r\n\r\n### class FMIndex()\r\n\r\nConstructor.\r\n\r\n### FMIndex.push(str : string) : void\r\n\r\nAppend string.\r\n\r\n### FMIndex.contentSize()\r\n\r\nReturn total length of pushed string. It is available before `build()`.\r\n\r\n### FMIndex.build(ddic : int, maxChar : int = 65535) : void\r\n\r\nBuild search index. `ddic` is a cache density. `(1 / ddic) * 100` % is a actual cache rate.\r\nIf ddic == 1, densty = 100%, it provides maximum speed but it use match memory and storage.\r\nInitial recommendation value is 50.\r\n\r\n`maxChar` is a maximum character code. If you reduce this, you can save memory.\r\n\r\n### FMIndex.size()\r\n\r\nReturn contetn size. It is available after `build()`.\r\n\r\n### FMIndex.search(keyword : string) : int[]\r\n\r\nReturn position list that includes `keyword`.\r\n\r\n### FMIndex.getSubstring(pos : int, len : int) : string\r\n\r\nReturn original document content.\r\n\r\n### FMIndex.dump(output : BinaryOutput) : void\r\n\r\nExport bit-vector.\r\n\r\n### FMIndex.load(input : BinaryInput) : void\r\n\r\nImport bit-vector.\r\n\r\nDevelopment\r\n-------------\r\n\r\n## JSX\r\n\r\nDon't be afraid [JSX](http://jsx.github.io)! If you have an experience of JavaScript, you can learn JSX\r\nquickly.\r\n\r\n* Static type system and unified class syntax.\r\n* All variables and methods belong to class.\r\n* JSX includes optimizer. You don't have to write tricky unreadalbe code for speed.\r\n* You can use almost all JavaScript API as you know. Some functions become static class functions. See [reference](http://jsx.github.io/doc/stdlibref.html).\r\n\r\n## Setup\r\n\r\nTo create development environment, call following command:\r\n\r\n```sh\r\n$ npm install\r\n```\r\n\r\n## Repository\r\n\r\n* Repository: git://github.com/shibukawa/fm-index.jsx.git\r\n* Issues: https://github.com/shibukawa/fm-index.jsx/issues\r\n\r\n## Run Test\r\n\r\n```sh\r\n$ grunt test\r\n```\r\n\r\n## Build\r\n\r\n```sh\r\n$ grunt build\r\n```\r\n\r\n## Generate API reference\r\n\r\n```sh\r\n$ grunt doc\r\n```\r\n\r\nAuthor\r\n---------\r\n\r\n* shibukawa / yoshiki@shibu.jp\r\n\r\nLicense\r\n------------\r\n\r\nMIT\r\n\r\nComplete license is written in `LICENSE.md`.\r\n",
+  "readmeFilename": "README.md",
+  "_id": "fm-index@0.3.2",
+  "_shasum": "45add01de32d09b5b98e9cb64b88f33fb69291fd",
+  "_from": "fm-index@>=0.3.2 <0.4.0"
 }
