@@ -1,2 +1,2 @@
-fm-index.*
-!fm-index.common.js
+*.js
+!*.common.js
