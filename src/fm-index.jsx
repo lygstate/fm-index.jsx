@@ -16,6 +16,7 @@ __export__ class FMIndex
 {
     var _substr : string;
     var _ddic : int;
+    var _ddic_mask: int;
     var _ssize : int;
     var _head : int;
     var _sv : WaveletMatrix;
@@ -105,9 +106,9 @@ __export__ class FMIndex
         var pos = 0;
         while (i != this._head)
         {
-            if ((i % this._ddic) == 0)
+            if ((i & this._ddic_mask) == 0)
             {
-                pos += (this._posdic[(i / this._ddic) as int] + 1);
+                pos += (this._posdic[(i >> this._ddic) as int] + 1);
                 break;
             }
             var c = this.get(i);
@@ -130,10 +131,10 @@ __export__ class FMIndex
         var pos_end  = Math.min(pos + len, this.size());
         var pos_tmp  = this.size() - 1;
         var i        = this._head;
-        var pos_idic = ((pos_end + this._ddic - 2) / this._ddic) as int;
+        var pos_idic = ((pos_end + this._ddic_mask - 1) >> this._ddic) as int;
         if (pos_idic < this._idic.length)
         {
-            pos_tmp = pos_idic * this._ddic;
+            pos_tmp = pos_idic << this._ddic;
             i       = this._idic[pos_idic];
         }
 
@@ -181,6 +182,7 @@ __export__ class FMIndex
         this._rlt[maxChar] = 0;
 
         this._ddic = ddic;
+        this._ddic_mask = ((1 << this._ddic) - 1) as int;
         this._buildDictionaries();
         this._build = true;
     }
@@ -190,7 +192,7 @@ __export__ class FMIndex
         this._posdic.length = 0;
         this._idic.length = 0;
 
-        var loop = (this._ssize / this._ddic + 1) as int;
+        var loop = ((this._ssize >> this._ddic) + 1) as int;
         for (var i = 0; i < loop; i++)
         {
             this._posdic.push(0);
@@ -199,13 +201,13 @@ __export__ class FMIndex
         var i = this._head;
         var pos = this.size() - 1;
         do {
-            if ((i % this._ddic) == 0)
+            if ((i & this._ddic_mask) == 0)
             {
-                this._posdic[(i / this._ddic) as int] = pos;
+                this._posdic[(i >> this._ddic) as int] = pos;
             }
-            if ((pos % this._ddic) == 0)
+            if ((pos & this._ddic_mask) == 0)
             {
-                this._idic[(pos / this._ddic) as int] = i;
+                this._idic[(pos >> this._ddic) as int] = i;
             }
             var c = this._sv.get(i);
             i = this._rlt[c] + this._sv.rank(i, c); //LF
@@ -241,7 +243,7 @@ __export__ class FMIndex
 
     function dump (output : BinaryOutput) : void
     {
-        output.dump32bitNumber(this._ddic);
+        output.dump16bitNumber(this._ddic);
         output.dump32bitNumber(this._ssize);
         output.dump32bitNumber(this._head);
         this._sv.dump(output);
@@ -258,7 +260,8 @@ __export__ class FMIndex
 
     function load (input : BinaryInput) : void
     {
-        this._ddic = input.load32bitNumber();
+        this._ddic = input.load16bitNumber();
+        this._ddic_mask = ((1 << this._ddic) - 1) as int;
         this._ssize = input.load32bitNumber();
         this._head = input.load32bitNumber();
         this._sv.load(input);
